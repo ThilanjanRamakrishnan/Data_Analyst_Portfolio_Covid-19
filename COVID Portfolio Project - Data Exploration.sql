@@ -1,6 +1,6 @@
 /*
 Covid 19 Data Exploration 
-Skills used: Joins, CTE's, Temp Tables, Windows Functions, Aggregate Functions, Creating Views, Converting Data Types
+Skills used: WITH clause, Temp Tables, Aggregate Functions, Creating Views
 */
 
 Select * 
@@ -8,7 +8,7 @@ From covid_data
 where continent <> ''
 
 
--- show total case vs total deaths vs case fataility rate for each countries
+-- Show total case vs total deaths vs case fatality rate for each country
 
 SELECT location, sum(new_cases) as total_cases, sum(new_deaths) as total_deaths, (sum(new_deaths)/sum(new_cases))*100 as case_fatality_rate
 FROM covid_data
@@ -16,7 +16,7 @@ where continent <> ''
 group by location
 order by sum(new_cases) desc
 
--- Show percentage of population infected with Covid for each country
+-- Show the percentage of the population infected with Covid for each country
 
 SELECT location, sum(new_cases) as total_cases, population, (sum(new_cases)/population) * 100 as infected_percentage
 FROM covid_data
@@ -24,7 +24,7 @@ where continent <> ''
 group by location, population
 order by sum(new_cases) desc
 
--- based on the population checking the vaccinated percentage 
+-- Based on the population checking the vaccinated percentage 
 
 with t1 as (Select location, people_fully_vaccinated, population
 			From covid_data
@@ -37,7 +37,7 @@ with t1 as (Select location, people_fully_vaccinated, population
 select *
 from t2
 
--- Getting the global sammary for total cases, total death, death percentage, total vaccinated population and total vacinated percentage
+-- Getting the global summary for total cases, total death, death percentage, total vaccinated population and total vaccinated percentage
 
 with t1 as (Select location, people_fully_vaccinated, population
 			From covid_data
