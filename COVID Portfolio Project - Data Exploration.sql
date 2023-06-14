@@ -59,3 +59,19 @@ with t1 as (Select location, people_fully_vaccinated, population
 SELECT t4.total_cases, t4.total_deaths, t4.death_percentage, t3.total_vaccinated_people, (t3.total_vaccinated_people/t5.total_population)*100 as vaccinated_percentage
 from t4, t3, t5
 
+-- Detemind the avarage cases per day 
+
+SELECT continent, location, date, new_deaths,
+AVG(new_deaths) OVER (PARTITION BY location ORDER BY date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS rolling_avg_deaths
+FROM covid_data
+where continent <> ''
+ORDER BY location, date;
+
+-- Find the date with the highest number of new cases for each location:
+
+SELECT continent, location, date, new_cases,
+       ROW_NUMBER() OVER (PARTITION BY location ORDER BY new_cases DESC) AS case_rank
+FROM covid_data
+where continent <> ''
+ORDER BY location, case_rank;
+
